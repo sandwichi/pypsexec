@@ -228,10 +228,13 @@ class OutputPipe(threading.Thread, metaclass=ABCMeta):
                                   % (str(exc.header['status']), self.name))
                         break
                     else:
-                        break
+                        raise exc
         finally:
             log.debug("Closing Output Named Pipe: %s" % self.name)
-            self.pipe.close(get_attributes=False)
+            try:
+                self.pipe.close(get_attributes=False)
+            except:
+                pass
         log.debug("Output Named Pipe %s thread finished" % self.name)
 
     @abstractmethod
